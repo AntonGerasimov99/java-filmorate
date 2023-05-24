@@ -17,7 +17,7 @@ public class FilmController {
 
     private static final Logger log = LoggerFactory.getLogger(FilmController.class);
     private final HashMap<Integer, Film> films = new HashMap<>();
-    private final LocalDate RELEASE_DATE_MAX = LocalDate.of(1895, 12, 28);
+    private final LocalDate releaseDateMax = LocalDate.of(1895, 12, 28);
     private int id;
 
     @NonNull
@@ -60,7 +60,7 @@ public class FilmController {
             log.warn("Максимальная длина описания - 200 символов." + " Фильм под id: " + film.getId());
             throw new ValidationException("Максимальная длина описания - 200 символов");
         }
-        if (film.getReleaseDate().isBefore(RELEASE_DATE_MAX)) {
+        if (film.getReleaseDate().isBefore(releaseDateMax)) {
             log.warn("Дата релиза — не раньше 28 декабря 1895 года." + " Фильм под id: " + film.getId());
             throw new ValidationException("Дата релиза — не раньше 28 декабря 1895 года");
         }
