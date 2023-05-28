@@ -24,7 +24,7 @@ public class FilmControllerTest {
                 .name("Name")
                 .description("Description")
                 .releaseDate(LocalDate.of(2000, 11, 15))
-                .duration(Duration.ofMinutes(120))
+                .duration(120)
                 .build();
     }
 
@@ -65,7 +65,7 @@ public class FilmControllerTest {
 
     @Test
     void shouldNotCreateFilmWithNegativeDurationTest() {
-        film.setDuration(Duration.ofMinutes(-200));
+        film.setDuration(-200);
         Throwable exception = assertThrows(ValidationException.class, () -> filmController.create(film));
         assertEquals("Продолжительность фильма должна быть положительной", exception.getMessage());
     }
@@ -78,7 +78,7 @@ public class FilmControllerTest {
                 .name("Name2")
                 .description("Description")
                 .releaseDate(LocalDate.of(2000, 11, 15))
-                .duration(Duration.ofMinutes(120))
+                .duration(120)
                 .build();
         filmController.create(filmTest);
         assertEquals(2, filmController.findAll().size());
@@ -92,7 +92,7 @@ public class FilmControllerTest {
                 .name("Name2")
                 .description("Description")
                 .releaseDate(LocalDate.of(2000, 11, 15))
-                .duration(Duration.ofMinutes(120))
+                .duration(120)
                 .build();
         filmController.create(filmTest);
         assertEquals("Name2", filmController.findAll().get(0).getName());
