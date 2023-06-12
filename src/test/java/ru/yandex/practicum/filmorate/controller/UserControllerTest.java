@@ -3,6 +3,8 @@ package ru.yandex.practicum.filmorate.controller;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.yandex.practicum.filmorate.service.UserService;
+import ru.yandex.practicum.filmorate.storage.InMemoryUserStorage;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
 
@@ -12,9 +14,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class UserControllerTest {
 
-    UserController userController = new UserController();
+    InMemoryUserStorage userStorage = new InMemoryUserStorage();
+    UserService userService = new UserService(userStorage);
+    UserController userController = new UserController(userService);
     User user;
     User userTest;
+    InMemoryUserStorage inMemoryUserStorage = new InMemoryUserStorage();
 
     @BeforeEach
     void setUp() {
@@ -29,7 +34,7 @@ public class UserControllerTest {
 
     @AfterEach
     void tearDown() {
-        userController.removeUsers();
+        inMemoryUserStorage.removeUsers();
     }
 
     @Test
