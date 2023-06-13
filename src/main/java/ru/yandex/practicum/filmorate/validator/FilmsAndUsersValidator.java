@@ -43,7 +43,7 @@ public class FilmsAndUsersValidator {
         if (user.getLogin().isBlank() || user.getLogin().contains(" ")) {
             throw new ValidationException("Логин не может быть пустым и содержать пробелы");
         }
-        if (user.getName() == null) {
+        if (user.getName().isEmpty()) {
             user.setName(user.getLogin());
             log.info("У пользователя поля name отсутствует");
         }

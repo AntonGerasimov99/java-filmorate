@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.validator.FilmsAndUsersValidator;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -12,11 +13,12 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
-public class InMemoryUserStorage implements UserStorage{
+public class InMemoryUserStorage implements UserStorage {
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryUserStorage.class);
     FilmsAndUsersValidator filmsAndUsersValidator = new FilmsAndUsersValidator();
     private final HashMap<Integer, User> users = new HashMap<>();
+
     @Override
     public User create(User user) {
         filmsAndUsersValidator.validationUser(user);
@@ -47,7 +49,10 @@ public class InMemoryUserStorage implements UserStorage{
     }
 
     @Override
-    public User getUserById (int id){
+    public User getUserById(int id) {
+        if (!users.containsKey(id)) {
+            throw new NotFoundElementException();
+        }
         return users.get(id);
     }
 

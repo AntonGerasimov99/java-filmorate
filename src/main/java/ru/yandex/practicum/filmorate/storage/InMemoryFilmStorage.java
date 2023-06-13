@@ -3,6 +3,7 @@ package ru.yandex.practicum.filmorate.storage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.validator.FilmsAndUsersValidator;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -45,6 +46,14 @@ public class InMemoryFilmStorage implements FilmStorage {
             res.add(value);
         }
         return res;
+    }
+
+    @Override
+    public Film getFilmById(int id) {
+        if (!films.containsKey(id)) {
+            throw new NotFoundElementException();
+        }
+        return films.get(id);
     }
 
     @Override

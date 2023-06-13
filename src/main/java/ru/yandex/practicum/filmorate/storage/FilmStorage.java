@@ -13,4 +13,6 @@ public interface FilmStorage {
     List<Film> findAll();
 
     void removeFilms();
+
+    Film getFilmById(int id);
 }

@@ -40,6 +40,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getFriendsById(id));
     }
 
+    @GetMapping(value = "/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable int id) {
+        return ResponseEntity.ok(userService.getUserById(id));
+    }
+
     @GetMapping(value = "{id}/friends/common/{otherId}")
     public ResponseEntity<List<User>> getFriends(@PathVariable int id, @PathVariable int otherId) {
         return ResponseEntity.ok(userService.getMutualFriend(id, otherId));

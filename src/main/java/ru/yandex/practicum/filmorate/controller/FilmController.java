@@ -5,10 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.FilmService;
-import ru.yandex.practicum.filmorate.storage.InMemoryFilmStorage;
 import ru.yandex.practicum.filmorate.model.Film;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,8 +29,8 @@ public class FilmController {
     }
 
     @PutMapping(value = "/{id}/like/{userId}")
-    public ResponseEntity<String> addLike(@PathVariable int id, @PathVariable int userID) {
-        return filmService.likedFilm(userID, id);
+    public ResponseEntity<String> addLike(@PathVariable int id, @PathVariable int userId) {
+        return filmService.likedFilm(id, userId);
     }
 
     @GetMapping
@@ -40,18 +38,18 @@ public class FilmController {
         return filmService.findAll();
     }
 
-    @GetMapping(value = "/popular?count={count}")
-    public ResponseEntity<List<Film>> getPopular(@PathVariable Optional<Integer> count) {
-        List<Film> result = new ArrayList<>();
-        if (count.isEmpty()) {
-            return ResponseEntity.ok(filmService.getPopularFilms());
-        } else {
-            return ResponseEntity.ok(filmService.getPopularFilms(count.get()));
-        }
+    @GetMapping(value = "{id}")
+    public Film getFilmById(@PathVariable int id) {
+        return filmService.getFilmById(id);
+    }
+
+    @GetMapping(value = "/popular")
+    public ResponseEntity<List<Film>> getPopular(@RequestParam Optional<Integer> count) {
+        return ResponseEntity.ok(filmService.getPopularFilms(count.orElse(10)));
     }
 
     @DeleteMapping(value = "/{id}/like/{userId}")
-    public ResponseEntity<String> dislike(@PathVariable int id, @PathVariable int userID) {
-        return filmService.dislikedFilm(userID, id);
+    public ResponseEntity<String> dislike(@PathVariable int id, @PathVariable int userId) {
+        return filmService.dislikedFilm(userId, id);
     }
 }

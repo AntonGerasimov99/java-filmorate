@@ -56,6 +56,7 @@ public class UserControllerTest {
                 .id(1)
                 .email("abcd2@mail.ru")
                 .login("LoginName2")
+                .name("")
                 .birthday(LocalDate.of(2000, 11, 15))
                 .build();
         userController.create(userTest);
