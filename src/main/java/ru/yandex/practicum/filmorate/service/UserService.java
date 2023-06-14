@@ -3,9 +3,8 @@ package ru.yandex.practicum.filmorate.service;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import ru.yandex.practicum.filmorate.exceptions.NoContentException;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
@@ -18,32 +17,31 @@ public class UserService {
     private final UserStorage userStorage;
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
-    public ResponseEntity<String> addFriend(int userId, int friendId) {
+    public void addFriend(int userId, int friendId) {
         if (userId == friendId) {
             log.info("Одинаковый пользователь");
-            return new ResponseEntity<>("Одинаковый пользователь", HttpStatus.ALREADY_REPORTED);
+            throw new NotFoundElementException();
         }
         if (isAlreadyFriend(userId, friendId)) {
             log.info("Пользователи уже друзья");
-            return new ResponseEntity<>("Пользователи уже друзья", HttpStatus.NO_CONTENT);
+            throw new NoContentException();
         }
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
         user.getFriends().add(friendId);
         friend.getFriends().add(userId);
-        return new ResponseEntity<>("Пользователи добавлены в друзья", HttpStatus.OK);
+        log.info("Пользователи добавлены в друзья");
     }
 
-    public ResponseEntity<String> deleteFriend(int userId, int friendId) {
+    public void deleteFriend(int userId, int friendId) {
         if (isNotFriend(userId, friendId)) {
             log.info("Пользователи не добавлены в друзья");
-            return new ResponseEntity<>("Пользователи не добавлены в друзья", HttpStatus.NO_CONTENT);
+            throw new NoContentException();
         }
         User user = userStorage.getUserById(userId);
         User friend = userStorage.getUserById(friendId);
         user.getFriends().remove(userId);
         friend.getFriends().remove(userId);
-        return new ResponseEntity<>("Пользователи удалены из друзей", HttpStatus.OK);
     }
 
     public List<User> getMutualFriend(int userId, int friendId) {

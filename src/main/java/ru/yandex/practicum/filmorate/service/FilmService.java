@@ -2,8 +2,6 @@ package ru.yandex.practicum.filmorate.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -23,21 +21,22 @@ public class FilmService {
     private final FilmStorage filmStorage;
     private final UserStorage userStorage;
 
-    public ResponseEntity<String> likedFilm(int filmId, int userId) {
+    public void likedFilm(int filmId, int userId) {
         if (filmStorage.getFilmById(filmId).getLikesUsers().contains(userId)) {
-            return new ResponseEntity<>("Вы уже поставили лайк этому фильму", HttpStatus.NOT_FOUND);
+            log.info("Вы уже поставили лайк этому фильму");
+            throw new NotFoundElementException();
         }
         Film film = filmStorage.getFilmById(filmId);
         film.getLikesUsers().add(userId);
         userStorage.getUserById(userId).getLikedFilms().add(filmId);
         film.setLikes(film.getLikes() + 1);
         log.info("Фильм добавлен в понравившиеся");
-        return new ResponseEntity<>("Вы лайкнули фильм", HttpStatus.OK);
     }
 
-    public ResponseEntity<String> dislikedFilm(int userId, int filmId) {
+    public void dislikedFilm(int userId, int filmId) {
         if (!filmStorage.getFilmById(filmId).getLikesUsers().contains(userId)) {
-            return new ResponseEntity<>("В списке понравившихся фильм отсутствует", HttpStatus.NOT_FOUND);
+            log.info("В списке понравившихся фильм отсутствует");
+            throw new NotFoundElementException();
         }
         Film film = filmStorage.getFilmById(filmId);
         User user = userStorage.getUserById(userId);
@@ -48,7 +47,6 @@ public class FilmService {
         userStorage.getUserById(userId).getLikedFilms().remove(filmId);
         film.setLikes(film.getLikes() - 1);
         log.info("Фильм убран из лайкнутых");
-        return new ResponseEntity<>("Фильм убран из лайкнутых", HttpStatus.OK);
     }
 
     public List<Film> getPopularFilms(int limit) {

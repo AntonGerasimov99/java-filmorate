@@ -1,8 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.model.Film;
@@ -17,7 +15,6 @@ public class FilmController {
 
     private final FilmService filmService;
 
-    @NonNull
     @PostMapping
     public Film create(@RequestBody Film film) {
         return filmService.create(film);
@@ -29,8 +26,8 @@ public class FilmController {
     }
 
     @PutMapping(value = "/{id}/like/{userId}")
-    public ResponseEntity<String> addLike(@PathVariable int id, @PathVariable int userId) {
-        return filmService.likedFilm(id, userId);
+    public void addLike(@PathVariable int id, @PathVariable int userId) {
+        filmService.likedFilm(id, userId);
     }
 
     @GetMapping
@@ -44,12 +41,12 @@ public class FilmController {
     }
 
     @GetMapping(value = "/popular")
-    public ResponseEntity<List<Film>> getPopular(@RequestParam Optional<Integer> count) {
-        return ResponseEntity.ok(filmService.getPopularFilms(count.orElse(10)));
+    public List<Film> getPopular(@RequestParam Optional<Integer> count) {
+        return filmService.getPopularFilms(count.orElse(10));
     }
 
     @DeleteMapping(value = "/{id}/like/{userId}")
-    public ResponseEntity<String> dislike(@PathVariable int id, @PathVariable int userId) {
-        return filmService.dislikedFilm(userId, id);
+    public void dislike(@PathVariable int id, @PathVariable int userId) {
+        filmService.dislikedFilm(userId, id);
     }
 }

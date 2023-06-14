@@ -4,9 +4,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
-import ru.yandex.practicum.filmorate.validator.FilmsAndUsersValidator;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
+import ru.yandex.practicum.filmorate.validator.FilmsValidator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,11 +17,11 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     private static final Logger log = LoggerFactory.getLogger(InMemoryFilmStorage.class);
     private final HashMap<Integer, Film> films = new HashMap<>();
-    FilmsAndUsersValidator filmsAndUsersValidator = new FilmsAndUsersValidator();
+    FilmsValidator filmsValidator = new FilmsValidator();
 
     @Override
     public Film create(Film film) {
-        filmsAndUsersValidator.validationFilm(film);
+        filmsValidator.validationFilm(film);
         films.put(film.getId(), film);
         log.info("Добавлен фильм под id: " + film.getId());
         return film;
@@ -29,7 +29,7 @@ public class InMemoryFilmStorage implements FilmStorage {
 
     @Override
     public Film update(Film film) {
-        filmsAndUsersValidator.validationFilm(film);
+        filmsValidator.validationFilm(film);
         if (!films.containsKey(film.getId())) {
             throw new ValidationException("Фильм под id: " + film.getId() + " отсутствует");
         }
