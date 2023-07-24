@@ -7,7 +7,7 @@ FROM film_likes;
 DELETE
 FROM films;
 
---ALTER TABLE films COLUMN id RESTART WITH 1;
+ALTER TABLE films ALTER COLUMN id RESTART WITH 1;
 
 DELETE
 FROM friends;
@@ -21,7 +21,7 @@ FROM mpa;
 DELETE
 FROM users;
 
---ALTER TABLE users COLUMN id RESTART WITH 1;
+ALTER TABLE users ALTER COLUMN id RESTART WITH 1;
 
 MERGE INTO genres (id, name)
 VALUES (1, 'Комедия'),

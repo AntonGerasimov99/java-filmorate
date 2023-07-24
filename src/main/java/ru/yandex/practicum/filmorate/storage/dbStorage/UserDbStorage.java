@@ -50,8 +50,9 @@ public class UserDbStorage implements UserStorage {
         if (getUserById(user.getId()) == null) {
             throw new NotFoundElementException();
         }
-        String sql = "UPDATE users SET " + "email = ?, login = ?, name = ?, birthday = ? " +
+        String sql = "UPDATE users SET email = ?, login = ?, name = ?, birthday = ? " +
                 "WHERE id = ?";
+        validationUser(user);
         jdbcTemplate.update(
                 sql,
                 user.getEmail(),
@@ -69,7 +70,7 @@ public class UserDbStorage implements UserStorage {
         return jdbcTemplate.query(sql, ((rs, rowNum) -> new User(
                 rs.getInt("id"),
                 rs.getString("email"),
-                rs.getString("email"),
+                rs.getString("login"),
                 rs.getString("name"),
                 rs.getDate("birthday").toLocalDate(),
                 null,
@@ -85,7 +86,7 @@ public class UserDbStorage implements UserStorage {
             user = new User(
                     findUser.getInt("id"),
                     findUser.getString("email"),
-                    findUser.getString("email"),
+                    findUser.getString("login"),
                     findUser.getString("name"),
                     findUser.getDate("birthday").toLocalDate(),
                     null,

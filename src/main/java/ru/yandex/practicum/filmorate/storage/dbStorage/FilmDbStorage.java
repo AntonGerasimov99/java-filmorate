@@ -66,7 +66,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public Film update(Film film) {
         validationFilm(film);
-        String sql = "UPDATE films SER name = ?, description = ?, release_date = ?, duration = ?," +
+        String sql = "UPDATE films SET name = ?, description = ?, release_date = ?, duration = ?, " +
                 "mpa_id = ? WHERE id = ?";
         if (jdbcTemplate.update(sql,
                 film.getName(),
@@ -96,7 +96,7 @@ public class FilmDbStorage implements FilmStorage {
     @Override
     public List<Film> findAll() {
         String sql = "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.mpa_id, " +
-                "fl.user_id, fl.film_id FROM films as f INNER JOIN film_likes as fl " +
+                "fl.user_id, fl.film_id FROM films as f LEFT JOIN film_likes as fl " +
                 "ON f.id = fl.film_id";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Film(
                 rs.getInt("id"),
@@ -116,17 +116,18 @@ public class FilmDbStorage implements FilmStorage {
         jdbcTemplate.update(sql);
     }
 
-    public void deleteFilmById(int id) {
+    public Film deleteFilmById(int id) {
         Film film = getFilmById(id);
         String sql = "DELETE FROM films WHERE id = ?";
         jdbcTemplate.update(sql, id);
+        return film;
     }
 
     @Override
     public Film getFilmById(int id) {
         Film film;
         String sql = "SELECT f.id, f.name, f.description, f.release_date, f.duration, f.mpa_id, " +
-                "fl.user_id, fl.film_id FROM films as f INNER JOIN film_likes as fl " +
+                "fl.user_id, fl.film_id FROM films as f LEFT JOIN film_likes as fl " +
                 "ON f.id = fl.film_id " +
                 "WHERE id = ?";
         SqlRowSet filmRowSet = jdbcTemplate.queryForRowSet(sql, id);
@@ -160,9 +161,6 @@ public class FilmDbStorage implements FilmStorage {
         if (film.getDuration() <= 0) {
             throw new ValidationException("Продолжительность фильма должна быть положительной");
         }
-        /*if (film.getId() == 0) {
-            film.setId(setIdFilm());
-        }*/
         return film;
     }
 

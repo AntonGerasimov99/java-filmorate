@@ -28,10 +28,10 @@ public class GenreDbStorage {
         ));
     }
 
-    public Genre getGenreById(int id){
+    public Genre getGenreById(int id) {
         Genre result;
         SqlRowSet genre = jdbcTemplate.queryForRowSet("SELECT * FROM genres WHERE id = ?", id);
-        if (genre.first()){
+        if (genre.first()) {
             result = new Genre(
                     genre.getInt("id"),
                     genre.getString("name")
@@ -42,21 +42,19 @@ public class GenreDbStorage {
         return result;
     }
 
-    public void addFilm(Film film){
-        if (film.getGenres() != null){
-            for (Genre genre : film.getGenres()){
+    public void addFilm(Film film) {
+        if (film.getGenres() != null) {
+            for (Genre genre : film.getGenres()) {
                 jdbcTemplate.update("INSERT INTO film_genres (film_id, genre_id) VALUES (?,?)", film.getId(), genre.getId());
             }
-        } else {
-            throw new NotFoundElementException();
         }
     }
 
-    public void deleteFilm(Film film){
+    public void deleteFilm(Film film) {
         jdbcTemplate.update("DELETE FROM film_genres WHERE film_id = ?", film.getId());
     }
 
-    public List<Genre> getFilmGenres(int id){
+    public List<Genre> getFilmGenres(int id) {
         String sql = "SELECT genre_id, name FROM film_genres INNER JOIN genres ON genre_id = id WHERE film_id = ?";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new Genre(
                 rs.getInt("genre_id"), rs.getString("name")

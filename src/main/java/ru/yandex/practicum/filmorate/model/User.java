@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
+import javax.validation.constraints.Email;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.LinkedHashSet;
@@ -17,6 +18,7 @@ import java.util.Set;
 public class User {
 
     private int id;
+    @Email
     private String email;
     private String login;
     private String name;

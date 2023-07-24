@@ -7,6 +7,8 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.model.MPA;
 
+import java.util.List;
+
 @Component
 public class MPADbStorage {
 
@@ -17,13 +19,13 @@ public class MPADbStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public MPA getMPAById (int id){
+    public MPA getMPAById (Integer id){
         MPA mpa;
-        SqlRowSet findMPA = jdbcTemplate.queryForRowSet("SELECT * FROM mpa WHERE id =?", id);
+        SqlRowSet findMPA = jdbcTemplate.queryForRowSet("SELECT * FROM mpa WHERE id = ?", id);
         if (findMPA.first()) {
             mpa = new MPA(
                     findMPA.getInt("id"),
-                    findMPA.getString("MPA")
+                    findMPA.getString("mpa")
             );
         } else {
             throw new NotFoundElementException();
@@ -31,4 +33,11 @@ public class MPADbStorage {
         return mpa;
     }
 
+    public List<MPA> findAllMPA(){
+        String sql = "SELECT * FROM mpa";
+        return jdbcTemplate.query(sql, (rs, rowNum) -> new MPA(
+                rs.getInt("id"),
+                rs.getString("mpa")
+        ));
+    }
 }

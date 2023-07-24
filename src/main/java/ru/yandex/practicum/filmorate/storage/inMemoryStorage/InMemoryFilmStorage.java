@@ -61,4 +61,10 @@ public class InMemoryFilmStorage implements FilmStorage {
     public void removeFilms() {
         films.clear();
     }
+
+    public Film deleteFilmById(int id){
+        Film film = films.get(id);
+        films.remove(id);
+        return film;
+    }
 }
