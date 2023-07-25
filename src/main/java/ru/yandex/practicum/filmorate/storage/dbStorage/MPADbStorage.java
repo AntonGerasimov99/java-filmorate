@@ -19,7 +19,7 @@ public class MPADbStorage {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    public MPA getMPAById (Integer id){
+    public MPA getMPAById(Integer id) {
         MPA mpa;
         SqlRowSet findMPA = jdbcTemplate.queryForRowSet("SELECT * FROM mpa WHERE id = ?", id);
         if (findMPA.first()) {
@@ -33,7 +33,7 @@ public class MPADbStorage {
         return mpa;
     }
 
-    public List<MPA> findAllMPA(){
+    public List<MPA> findAllMPA() {
         String sql = "SELECT * FROM mpa";
         return jdbcTemplate.query(sql, (rs, rowNum) -> new MPA(
                 rs.getInt("id"),

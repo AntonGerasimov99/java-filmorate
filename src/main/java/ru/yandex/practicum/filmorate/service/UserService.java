@@ -1,17 +1,14 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import ru.yandex.practicum.filmorate.exceptions.NoContentException;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.storage.dbStorage.FriendsDbStorage;
-import ru.yandex.practicum.filmorate.storage.dbStorage.UserDbStorage;
 
 import java.util.*;
 
@@ -33,10 +30,6 @@ public class UserService {
             log.info("Одинаковый пользователь");
             throw new NotFoundElementException();
         }
-        /*if (isAlreadyFriend(userId, friendId)) {
-            log.info("Пользователи уже друзья");
-            throw new NoContentException();
-        }*/
         friendsDbStorage.addFriend(userId, friendId);
     }
 
@@ -65,9 +58,6 @@ public class UserService {
 
     public List<User> getFriendsById(int userId) {
         List<User> result = friendsDbStorage.getFriendsById(userId);
-        /*if (result.isEmpty()) {
-            throw new NotFoundElementException();
-        }*/
         return result;
     }
 

@@ -31,12 +31,12 @@ public class User {
         this.email = email;
         this.login = login;
         this.name = name;
-        if ((name.isEmpty())){
+        if ((name.isEmpty())) {
             this.name = login;
         }
         this.birthday = birthday;
         this.friends = friends;
-        if(friends == null){
+        if (friends == null) {
             this.friends = new HashSet<>();
         }
     }

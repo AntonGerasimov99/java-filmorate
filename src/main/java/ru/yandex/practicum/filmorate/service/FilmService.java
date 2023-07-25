@@ -1,6 +1,5 @@
 package ru.yandex.practicum.filmorate.service;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -25,7 +24,7 @@ public class FilmService {
     @Autowired
     public FilmService(@Qualifier("filmDbStorage") FilmStorage filmStorage,
                        @Qualifier("userDbStorage") UserStorage userStorage,
-                       LikeDbStorage likeStorage){
+                       LikeDbStorage likeStorage) {
         this.filmStorage = filmStorage;
         this.userStorage = userStorage;
         this.likeStorage = likeStorage;
@@ -34,11 +33,11 @@ public class FilmService {
     public void likedFilm(int filmId, int userId) {
         Film film = filmStorage.getFilmById(filmId);
         User user = userStorage.getUserById(userId);
-        if(film == null){
+        if (film == null) {
             log.info("Фильм с данным id отсутствует");
             throw new NotFoundElementException();
         }
-        if (user == null){
+        if (user == null) {
             log.info("Пользователь с данным id отсутствует");
             throw new NotFoundElementException();
         }
@@ -49,11 +48,11 @@ public class FilmService {
     public void dislikedFilm(int userId, int filmId) {
         Film film = filmStorage.getFilmById(filmId);
         User user = userStorage.getUserById(userId);
-        if(film == null){
+        if (film == null) {
             log.info("Фильм с данным id отсутствует");
             throw new NotFoundElementException();
         }
-        if (user == null){
+        if (user == null) {
             log.info("Пользователь с данным id отсутствует");
             throw new NotFoundElementException();
         }
@@ -62,7 +61,7 @@ public class FilmService {
     }
 
     public List<Film> getPopularFilms(int limit) {
-        if (limit<1){
+        if (limit < 1) {
             throw new ValidationException("Лимит фильмов должен быть больше 0");
         }
         return likeStorage.getPopularFilms(limit);

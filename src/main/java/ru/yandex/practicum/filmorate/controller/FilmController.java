@@ -14,9 +14,10 @@ public class FilmController {
     private final FilmService filmService;
 
     @Autowired
-    public FilmController(FilmService filmService){
+    public FilmController(FilmService filmService) {
         this.filmService = filmService;
     }
+
     @PostMapping
     public Film create(@RequestBody Film film) {
         return filmService.create(film);
@@ -43,8 +44,8 @@ public class FilmController {
     }
 
     @GetMapping(value = "/popular")
-    public List<Film> getPopular(@RequestParam(value = "limit", required = false, defaultValue = "10") int limit) {
-        return filmService.getPopularFilms(limit);
+    public List<Film> getPopular(@RequestParam(value = "count", required = false, defaultValue = "10") int count) {
+        return filmService.getPopularFilms(count);
     }
 
     @DeleteMapping(value = "/{id}/like/{userId}")

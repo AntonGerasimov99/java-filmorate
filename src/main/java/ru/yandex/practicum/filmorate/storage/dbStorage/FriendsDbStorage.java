@@ -41,7 +41,7 @@ public class FriendsDbStorage {
             status = true;
             String sql = "UPDATE friends SET user_id = ? AND friend_id = ? AND status = ? " +
                     "WHERE user_id = ? AND friend_id = ?";
-            jdbcTemplate.update(sql, friendId, userId,  status, userId, friendId);
+            jdbcTemplate.update(sql, friendId, userId, status, userId, friendId);
         } else {
             String sql = "INSERT INTO friends (user_id, friend_id, status) VALUES (?,?,?)";
             jdbcTemplate.update(sql, userId, friendId, status);
