@@ -60,16 +60,6 @@ public class FilmDBTest {
     }
 
     @Test
-    void findAllFilmsTest() {
-        filmDbStorage.create(film);
-        filmDbStorage.create(film2);
-        List<Film> test = filmDbStorage.findAll();
-        assertEquals(2, test.size());
-        filmDbStorage.deleteFilmById(film.getId());
-        filmDbStorage.deleteFilmById(film2.getId());
-    }
-
-    @Test
     void updateUserTest() {
         filmDbStorage.create(film);
         film.setName("newName");

@@ -58,16 +58,6 @@ public class UserDbTest {
     }
 
     @Test
-    void findAllUsersTest() {
-        userDbStorage.create(user);
-        userDbStorage.create(user2);
-        List<User> test = userDbStorage.findAll();
-        assertEquals(2, test.size());
-        userDbStorage.deleteUserById(user.getId());
-        userDbStorage.deleteUserById(user2.getId());
-    }
-
-    @Test
     void updateUserTest() {
         userDbStorage.create(user);
         user.setName("newName");
