@@ -55,7 +55,7 @@ public class FilmDBTest {
     void getFilmByIdTest() {
         filmDbStorage.create(film);
         Film test = filmDbStorage.getFilmById(1);
-        assertThat(test).hasFieldOrPropertyWithValue("id",1);
+        assertThat(test).hasFieldOrPropertyWithValue("id", 1);
     }
 
     @Test

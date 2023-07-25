@@ -84,37 +84,37 @@ public class LikeDbTest {
     }
 
     @Test
-    void addLikeToFilmTest(){
-        likeDbStorage.addLike(1,1);
+    void addLikeToFilmTest() {
+        likeDbStorage.addLike(1, 1);
         List<Integer> likes = likeDbStorage.getLikes(1);
         assertEquals(1, likes.size());
-        likeDbStorage.deleteLike(1,1);
+        likeDbStorage.deleteLike(1, 1);
     }
 
     @Test
     void addAndDeleteLikeToFilmTest() {
-        likeDbStorage.addLike(1,1);
+        likeDbStorage.addLike(1, 1);
         List<Integer> likes = likeDbStorage.getLikes(1);
-        likeDbStorage.deleteLike(1,1);
+        likeDbStorage.deleteLike(1, 1);
         List<Integer> test = likeDbStorage.getLikes(1);
-        assertEquals(likes.size()-1, test.size());
+        assertEquals(likes.size() - 1, test.size());
     }
 
     @Test
-    void getOnePopularFilm(){
-        likeDbStorage.addLike(1,1);
-        likeDbStorage.addLike(2,1);
+    void getOnePopularFilm() {
+        likeDbStorage.addLike(1, 1);
+        likeDbStorage.addLike(2, 1);
         List<Film> test = likeDbStorage.getPopularFilms(1);
-        assertEquals(1,test.size());
-        likeDbStorage.deleteLike(1,1);
-        likeDbStorage.deleteLike(2,1);
+        assertEquals(1, test.size());
+        likeDbStorage.deleteLike(1, 1);
+        likeDbStorage.deleteLike(2, 1);
     }
 
     @Test
-    void getTwoPopularFilm(){
-        likeDbStorage.addLike(1,1);
-        likeDbStorage.addLike(2,1);
+    void getTwoPopularFilm() {
+        likeDbStorage.addLike(1, 1);
+        likeDbStorage.addLike(2, 1);
         List<Film> test = likeDbStorage.getPopularFilms(2);
-        assertEquals(2,test.size());
+        assertEquals(2, test.size());
     }
 }

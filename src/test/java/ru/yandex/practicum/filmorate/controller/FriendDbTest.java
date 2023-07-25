@@ -51,7 +51,7 @@ public class FriendDbTest {
     }
 
     @Test
-    void addFriendsTest(){
+    void addFriendsTest() {
         userDbStorage.create(user);
         userDbStorage.create(user2);
         friendsDbStorage.addFriend(user.getId(), user2.getId());
