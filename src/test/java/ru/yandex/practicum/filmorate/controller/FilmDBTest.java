@@ -56,6 +56,7 @@ public class FilmDBTest {
         filmDbStorage.create(film);
         Film test = filmDbStorage.getFilmById(1);
         assertThat(test).hasFieldOrPropertyWithValue("id", 1);
+        filmDbStorage.deleteFilmById(film.getId());
     }
 
     @Test
@@ -63,7 +64,9 @@ public class FilmDBTest {
         filmDbStorage.create(film);
         filmDbStorage.create(film2);
         List<Film> test = filmDbStorage.findAll();
-        assertEquals(3, test.size());
+        assertEquals(2, test.size());
+        filmDbStorage.deleteFilmById(film.getId());
+        filmDbStorage.deleteFilmById(film2.getId());
     }
 
     @Test
@@ -74,6 +77,7 @@ public class FilmDBTest {
         filmDbStorage.update(film);
         Film test = filmDbStorage.getFilmById(id);
         assertThat(test).hasFieldOrPropertyWithValue("name", "newName");
+        filmDbStorage.deleteFilmById(film.getId());
     }
 
     @Test
@@ -85,5 +89,6 @@ public class FilmDBTest {
         filmDbStorage.deleteFilmById(id);
         List<Film> test2 = filmDbStorage.findAll();
         assertEquals(test.size() - 1, test2.size());
+        filmDbStorage.deleteFilmById(film2.getId());
     }
 }

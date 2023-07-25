@@ -52,15 +52,19 @@ public class UserDbTest {
     @Test
     void getUserById() {
         userDbStorage.create(user);
-        User test = userDbStorage.getUserById(1);
-        assertThat(test).hasFieldOrPropertyWithValue("id", 1);
+        User test = userDbStorage.getUserById(user.getId());
+        assertThat(test).hasFieldOrPropertyWithValue("id", user.getId());
+        userDbStorage.deleteUserById(user.getId());
     }
 
     @Test
     void findAllUsersTest() {
+        userDbStorage.create(user);
         userDbStorage.create(user2);
         List<User> test = userDbStorage.findAll();
         assertEquals(2, test.size());
+        userDbStorage.deleteUserById(user.getId());
+        userDbStorage.deleteUserById(user2.getId());
     }
 
     @Test
@@ -68,8 +72,9 @@ public class UserDbTest {
         userDbStorage.create(user);
         user.setName("newName");
         userDbStorage.update(user);
-        User test = userDbStorage.getUserById(1);
+        User test = userDbStorage.getUserById(user.getId());
         assertThat(test).hasFieldOrPropertyWithValue("name", "newName");
+        userDbStorage.deleteUserById(user.getId());
     }
 
     @Test
@@ -77,8 +82,9 @@ public class UserDbTest {
         userDbStorage.create(user);
         userDbStorage.create(user2);
         List<User> test = userDbStorage.findAll();
-        userDbStorage.deleteUserById(1);
+        userDbStorage.deleteUserById(user.getId());
         List<User> test2 = userDbStorage.findAll();
         assertEquals(test.size() - 1, test2.size());
+        userDbStorage.deleteUserById(user2.getId());
     }
 }

@@ -57,5 +57,7 @@ public class FriendDbTest {
         friendsDbStorage.addFriend(user.getId(), user2.getId());
         List<User> test = friendsDbStorage.getFriendsById(user.getId());
         assertEquals(1, test.size());
+        userDbStorage.deleteUserById(user.getId());
+        userDbStorage.deleteUserById(user2.getId());
     }
 }

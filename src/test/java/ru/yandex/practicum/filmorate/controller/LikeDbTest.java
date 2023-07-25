@@ -85,36 +85,38 @@ public class LikeDbTest {
 
     @Test
     void addLikeToFilmTest() {
-        likeDbStorage.addLike(1, 1);
-        List<Integer> likes = likeDbStorage.getLikes(1);
+        likeDbStorage.addLike(film.getId(), user.getId());
+        List<Integer> likes = likeDbStorage.getLikes(film.getId());
         assertEquals(1, likes.size());
-        likeDbStorage.deleteLike(1, 1);
+        likeDbStorage.deleteLike(film.getId(), user.getId());
     }
 
     @Test
     void addAndDeleteLikeToFilmTest() {
-        likeDbStorage.addLike(1, 1);
-        List<Integer> likes = likeDbStorage.getLikes(1);
-        likeDbStorage.deleteLike(1, 1);
-        List<Integer> test = likeDbStorage.getLikes(1);
+        likeDbStorage.addLike(film.getId(), user.getId());
+        List<Integer> likes = likeDbStorage.getLikes(film.getId());
+        likeDbStorage.deleteLike(film.getId(), user.getId());
+        List<Integer> test = likeDbStorage.getLikes(film.getId());
         assertEquals(likes.size() - 1, test.size());
     }
 
     @Test
     void getOnePopularFilm() {
-        likeDbStorage.addLike(1, 1);
-        likeDbStorage.addLike(2, 1);
+        likeDbStorage.addLike(film.getId(), user.getId());
+        likeDbStorage.addLike(film2.getId(), user.getId());
         List<Film> test = likeDbStorage.getPopularFilms(1);
         assertEquals(1, test.size());
-        likeDbStorage.deleteLike(1, 1);
-        likeDbStorage.deleteLike(2, 1);
+        likeDbStorage.deleteLike(film.getId(), user.getId());
+        likeDbStorage.deleteLike(film2.getId(), user.getId());
     }
 
     @Test
     void getTwoPopularFilm() {
-        likeDbStorage.addLike(1, 1);
-        likeDbStorage.addLike(2, 1);
+        likeDbStorage.addLike(film.getId(), user.getId());
+        likeDbStorage.addLike(film2.getId(), user.getId());
         List<Film> test = likeDbStorage.getPopularFilms(2);
         assertEquals(2, test.size());
+        likeDbStorage.deleteLike(film.getId(), user.getId());
+        likeDbStorage.deleteLike(film2.getId(), user.getId());
     }
 }
