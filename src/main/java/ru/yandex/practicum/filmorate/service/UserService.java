@@ -1,9 +1,8 @@
 package ru.yandex.practicum.filmorate.service;
 
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -13,15 +12,10 @@ import ru.yandex.practicum.filmorate.storage.dbStorage.FriendsDbStorage;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class UserService {
-    private final UserStorage userStorage;
+    private final UserStorage userDbStorage;
     private final FriendsDbStorage friendsDbStorage;
-
-    @Autowired
-    public UserService(@Qualifier("userDbStorage") UserStorage userStorage, FriendsDbStorage friendsDbStorage) {
-        this.userStorage = userStorage;
-        this.friendsDbStorage = friendsDbStorage;
-    }
 
     private static final Logger log = LoggerFactory.getLogger(UserService.class);
 
@@ -62,36 +56,36 @@ public class UserService {
     }
 
     public boolean isAlreadyFriend(int userId, int friendId) {
-        User user = userStorage.getUserById(userId);
-        User friend = userStorage.getUserById(friendId);
+        User user = userDbStorage.getUserById(userId);
+        User friend = userDbStorage.getUserById(friendId);
         return ((user != null && user.getFriends().contains(friendId)) || (friend != null &&
                 friend.getFriends().contains(friendId)));
     }
 
     public boolean isNotFriend(int userId, int friendId) {
-        User user = userStorage.getUserById(userId);
-        User friend = userStorage.getUserById(friendId);
+        User user = userDbStorage.getUserById(userId);
+        User friend = userDbStorage.getUserById(friendId);
         return ((user != null && !user.getFriends().contains(friendId)) || (friend != null &&
                 !friend.getFriends().contains(friendId)));
     }
 
     public User getUserById(int id) {
-        return userStorage.getUserById(id);
+        return userDbStorage.getUserById(id);
     }
 
     public User create(User user) {
-        return userStorage.create(user);
+        return userDbStorage.create(user);
     }
 
     public User update(User user) {
-        return userStorage.update(user);
+        return userDbStorage.update(user);
     }
 
     public List<User> findAll() {
-        return userStorage.findAll();
+        return userDbStorage.findAll();
     }
 
     public User deleteUserById(int id) {
-        return userStorage.deleteUserById(id);
+        return userDbStorage.deleteUserById(id);
     }
 }

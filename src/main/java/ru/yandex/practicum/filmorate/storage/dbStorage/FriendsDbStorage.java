@@ -3,7 +3,7 @@ package ru.yandex.practicum.filmorate.storage.dbStorage;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 import ru.yandex.practicum.filmorate.exceptions.NoContentException;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.model.User;
@@ -12,8 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-@Component
 @Slf4j
+@Repository
 public class FriendsDbStorage {
 
     private final JdbcTemplate jdbcTemplate;
