@@ -1,6 +1,6 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.UserService;
 import ru.yandex.practicum.filmorate.model.User;
@@ -9,10 +9,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    @Autowired
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
     public User create(@RequestBody User user) {
@@ -22,6 +26,11 @@ public class UserController {
     @PutMapping
     public User update(@RequestBody User user) {
         return userService.update(user);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable int id) {
+        userService.deleteUserById(id);
     }
 
     @PutMapping(value = "/{id}/friends/{friendId}")

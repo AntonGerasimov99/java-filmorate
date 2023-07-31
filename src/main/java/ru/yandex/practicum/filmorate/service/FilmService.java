@@ -4,72 +4,77 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
+import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.Film;
 import ru.yandex.practicum.filmorate.model.User;
 import ru.yandex.practicum.filmorate.storage.FilmStorage;
 import ru.yandex.practicum.filmorate.storage.UserStorage;
+import ru.yandex.practicum.filmorate.storage.dbStorage.LikeDbStorage;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
 public class FilmService {
-    private final FilmStorage filmStorage;
-    private final UserStorage userStorage;
+    private final FilmStorage filmDbStorage;
+    private final UserStorage userDbStorage;
+    private final LikeDbStorage likeDbStorage;
 
     public void likedFilm(int filmId, int userId) {
-        if (filmStorage.getFilmById(filmId).getLikesUsers().contains(userId)) {
-            log.info("Вы уже поставили лайк этому фильму");
-            throw new NotFoundElementException();
-        }
-        Film film = filmStorage.getFilmById(filmId);
-        film.getLikesUsers().add(userId);
-        userStorage.getUserById(userId).getLikedFilms().add(filmId);
-        film.setLikes(film.getLikes() + 1);
+        checkFilmNotNull(filmId);
+        checkUserNotNull(userId);
+        likeDbStorage.addLike(filmId, userId);
         log.info("Фильм добавлен в понравившиеся");
     }
 
     public void dislikedFilm(int userId, int filmId) {
-        if (!filmStorage.getFilmById(filmId).getLikesUsers().contains(userId)) {
-            log.info("В списке понравившихся фильм отсутствует");
-            throw new NotFoundElementException();
-        }
-        Film film = filmStorage.getFilmById(filmId);
-        User user = userStorage.getUserById(userId);
-        if (!film.getLikesUsers().contains(userId)) {
-            throw new NotFoundElementException();
-        }
-        film.getLikesUsers().remove(userId);
-        userStorage.getUserById(userId).getLikedFilms().remove(filmId);
-        film.setLikes(film.getLikes() - 1);
+        checkFilmNotNull(filmId);
+        checkUserNotNull(userId);
+        likeDbStorage.deleteLike(filmId, userId);
         log.info("Фильм убран из лайкнутых");
     }
 
     public List<Film> getPopularFilms(int limit) {
-        List<Film> popularFilms = new ArrayList<>(filmStorage.findAll());
-        return popularFilms.stream()
-                .sorted(Comparator.comparing(Film::getLikes).reversed())
-                .limit(limit)
-                .collect(Collectors.toList());
+        if (limit < 1) {
+            throw new ValidationException("Лимит фильмов должен быть больше 0");
+        }
+        return likeDbStorage.getPopularFilms(limit);
     }
 
     public Film getFilmById(int id) {
-        return filmStorage.getFilmById(id);
+        return filmDbStorage.getFilmById(id);
     }
 
     public Film update(Film film) {
-        return filmStorage.update(film);
+        return filmDbStorage.update(film);
     }
 
     public Film create(Film film) {
-        return filmStorage.create(film);
+        return filmDbStorage.create(film);
     }
 
     public List<Film> findAll() {
-        return filmStorage.findAll();
+        return filmDbStorage.findAll();
+    }
+
+    public Film delete(int id) {
+        return filmDbStorage.deleteFilmById(id);
+    }
+
+    public void checkFilmNotNull(int filmId) {
+        Film film = filmDbStorage.getFilmById(filmId);
+        if (film == null) {
+            log.info("Фильм с данным id отсутствует");
+            throw new NotFoundElementException();
+        }
+    }
+
+    public void checkUserNotNull(int userId) {
+        User user = userDbStorage.getUserById(userId);
+        if (user == null) {
+            log.info("Пользователь с данным id отсутствует");
+            throw new NotFoundElementException();
+        }
     }
 }

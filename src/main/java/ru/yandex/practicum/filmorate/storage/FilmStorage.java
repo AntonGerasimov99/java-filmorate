@@ -15,4 +15,6 @@ public interface FilmStorage {
     void removeFilms();
 
     Film getFilmById(int id);
+
+    Film deleteFilmById(int id);
 }

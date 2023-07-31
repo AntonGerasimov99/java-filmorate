@@ -1,19 +1,22 @@
 package ru.yandex.practicum.filmorate.controller;
 
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.yandex.practicum.filmorate.service.FilmService;
 import ru.yandex.practicum.filmorate.model.Film;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/films")
-@RequiredArgsConstructor
 public class FilmController {
 
     private final FilmService filmService;
+
+    @Autowired
+    public FilmController(FilmService filmService) {
+        this.filmService = filmService;
+    }
 
     @PostMapping
     public Film create(@RequestBody Film film) {
@@ -41,12 +44,17 @@ public class FilmController {
     }
 
     @GetMapping(value = "/popular")
-    public List<Film> getPopular(@RequestParam Optional<Integer> count) {
-        return filmService.getPopularFilms(count.orElse(10));
+    public List<Film> getPopular(@RequestParam(value = "count", defaultValue = "10") int count) {
+        return filmService.getPopularFilms(count);
     }
 
     @DeleteMapping(value = "/{id}/like/{userId}")
     public void dislike(@PathVariable int id, @PathVariable int userId) {
-        filmService.dislikedFilm(userId, id);
+        filmService.dislikedFilm(id, userId);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public void delete(@PathVariable int id) {
+        filmService.delete(id);
     }
 }

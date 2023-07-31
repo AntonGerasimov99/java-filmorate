@@ -1,4 +1,4 @@
-package ru.yandex.practicum.filmorate.storage;
+package ru.yandex.practicum.filmorate.storage.inMemoryStorage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import ru.yandex.practicum.filmorate.exceptions.NotFoundElementException;
 import ru.yandex.practicum.filmorate.exceptions.ValidationException;
 import ru.yandex.practicum.filmorate.model.User;
+import ru.yandex.practicum.filmorate.storage.UserStorage;
 import ru.yandex.practicum.filmorate.validator.UsersValidator;
 
 import java.util.ArrayList;
@@ -58,5 +59,12 @@ public class InMemoryUserStorage implements UserStorage {
 
     public void removeUsers() {
         users.clear();
+    }
+
+    @Override
+    public User deleteUserById(int id) {
+        User user = users.get(id);
+        users.remove(id);
+        return user;
     }
 }
